@@ -7,6 +7,13 @@
 
 import { useState } from 'react';
 import '../styles/AnalysisForm.css';
+import PropTypes from 'prop-types';
+
+AnalysisForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  loading: PropTypes.bool,
+  error: PropTypes.string
+};
 
 export default function AnalysisForm({ onSubmit, loading, error }) {
   const [url, setUrl] = useState('');

@@ -6,7 +6,6 @@
 
 import ScoreCard from './ScoreCard';
 import RecommendationsList from './RecommendationsList';
-import '../styles/AnalysisResults.css';
 
 export default function AnalysisResults({ analysis }) {
   if (!analysis) return null;
@@ -14,7 +13,7 @@ export default function AnalysisResults({ analysis }) {
   const { url, scores, recommendations, actionPlan } = analysis;
 
   return (
-    <div className="results-container">
+    <div style={styles.resultsContainer}>
       {/* Header */}
       <div className="results-header">
         <h2>📊 Website Audit Report</h2>

@@ -1,111 +1,279 @@
-# 🔍 Auditoría Report
+# Auditoría Report
 
-Professional website audit reports with SEO, performance, security, and best practices analysis. Powered by Claude AI.
+Professional website audit SaaS application analyzing SEO, Performance, Security, and Best Practices.
 
-**🎯 Value Proposition:** Analyze any website in seconds and get a comprehensive audit report for €29.
+## 🚀 Features
 
-## Project Structure
+- **Website Analysis**: Automatic SEO, Performance, Security, and Best Practices scoring (0-100)
+- **AI-Powered Recommendations**: Claude AI generates intelligent improvement suggestions
+- **Professional Reports**: Detailed audit reports with actionable recommendations
+- **Real-time Results**: Instant analysis with visual score representation
+- **Responsive Design**: Works on desktop, tablet, and mobile devices
+
+## 📊 Audit Metrics
+
+- **SEO Score**: Meta tags, mobile viewport, sitemap, structured data
+- **Performance**: Asset minification, lazy loading, cache headers, compression
+- **Security**: HTTPS, security headers, CSP, HSTS
+- **Best Practices**: Accessibility, semantic HTML, favicon, charset
+
+## 🏗️ Architecture
 
 ```
 auditoria-report/
 ├── apps/
-│   ├── backend/          # Express API server
-│   └── frontend/         # React web application
-├── packages/
-│   └── shared/           # Shared types and utilities
-├── docs/                 # Documentation
-└── README.md
+│   ├── backend/          # Node.js + Express API
+│   │   ├── src/
+│   │   │   ├── config/           # Configuration & environment
+│   │   │   ├── services/         # Business logic (analysis, recommendations, etc)
+│   │   │   ├── controllers/      # Route handlers
+│   │   │   ├── routes/           # API endpoints
+│   │   │   ├── middleware/       # Error handling, logging
+│   │   │   ├── utils/            # Validators, loggers, helpers
+│   │   │   ├── types/            # JSDoc type definitions
+│   │   │   ├── constants/        # Configuration constants
+│   │   │   └── index.js          # Express server entry point
+│   │   ├── package.json
+│   │   └── .env                  # Environment variables
+│   │
+│   └── frontend/         # Vite + Vanilla JS
+│       ├── src/
+│       │   ├── components/       # React components (reusable)
+│       │   ├── App.jsx           # Main React component
+│       │   ├── index.css         # Global styles
+│       │   └── main.jsx          # React entry point
+│       ├── index.html            # HTML entry point (vanilla JS version)
+│       ├── package.json
+│       └── .env                  # Environment variables
+│
+└── docs/                 # Documentation
 ```
 
-## Features
+## 🛠️ Tech Stack
 
-✅ **Comprehensive Analysis**
-- SEO Audit (meta tags, mobile-friendly, sitemap, structured data)
-- Performance Analysis (load time, minification, image optimization, caching)
-- Security Audit (HTTPS, security headers, vulnerabilities)
-- Best Practices (accessibility, semantic HTML, GDPR compliance)
+**Backend:**
+- Node.js v22+
+- Express.js (REST API)
+- Claude API (AI recommendations)
+- ESM modules
 
-✅ **Beautiful Reports**
-- Professional HTML reports with visual score cards
-- Color-coded results (Green: >80, Yellow: 60-80, Red: <60)
-- Specific, actionable recommendations
-- Top 3 action plan with impact estimation
+**Frontend:**
+- HTML5 + Vanilla JavaScript (primary)
+- React + JSX (alternative)
+- Vite (dev server & bundler)
+- CSS3 (responsive design)
 
-✅ **Business Features**
-- Stripe integration for payments (€29/report)
-- Automated email delivery (Resend)
-- PDF generation and download
-- User email validation
+**Services:**
+- Stripe (payments) - placeholder
+- Resend (email) - placeholder
+- Puppeteer (PDF generation) - placeholder
 
-## Tech Stack
+## 📦 Installation
 
-### Backend
-- Node.js + Express
-- Claude API (Anthropic) for AI analysis
-- Stripe for payments
-- Resend for email delivery
-- Puppeteer for PDF generation
+### Prerequisites
+- Node.js v22+
+- npm or yarn
 
-### Frontend
-- React + Vite
-- Axios for API calls
-- Responsive design
+### Setup
 
-### Infrastructure
-- Vercel (deployment)
-- GitHub (version control)
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/fridayagente/auditoria-report.git
+   cd auditoria-report
+   ```
 
-## Quick Start
+2. **Install backend dependencies:**
+   ```bash
+   cd apps/backend
+   npm install
+   ```
 
-### Backend
+3. **Install frontend dependencies:**
+   ```bash
+   cd ../frontend
+   npm install
+   ```
 
+4. **Configure environment variables:**
+
+   Backend (`apps/backend/.env`):
+   ```env
+   PORT=5000
+   NODE_ENV=development
+   FRONTEND_URL=http://localhost:5173
+   STRIPE_SECRET_KEY=placeholder
+   RESEND_API_KEY=placeholder
+   CLAUDE_API_KEY=your-api-key
+   CLAUDE_MODEL=claude-sonnet-4-5-20251001
+   ENABLE_STRIPE_PAYMENTS=false
+   ENABLE_EMAIL_NOTIFICATIONS=false
+   ENABLE_CLAUDE_ANALYSIS=false
+   ENABLE_PDF_GENERATION=false
+   ```
+
+   Frontend (`apps/frontend/.env`):
+   ```env
+   VITE_API_URL=http://localhost:5000
+   VITE_STRIPE_PUBLIC_KEY=pk_test_placeholder
+   ```
+
+## 🚀 Running Locally
+
+### Terminal 1 - Backend
 ```bash
 cd apps/backend
-npm install
-cp .env.example .env
-# Configure environment variables
 npm run dev
 ```
 
-### Frontend
+Backend will start on `http://localhost:5000`
 
+### Terminal 2 - Frontend
 ```bash
 cd apps/frontend
-npm install
 npm run dev
 ```
 
-## Environment Variables
+Frontend will start on `http://localhost:5173` (or next available port)
 
-See `.env.example` in each app directory.
+### Testing
 
-**Required:**
-- `STRIPE_SECRET_KEY` - Stripe API key
-- `RESEND_API_KEY` - Resend email API key
-- `CLAUDE_API_KEY` - Anthropic Claude API key
-
-## API Documentation
-
-See `/docs/API.md` for complete API reference.
-
-## Deployment
-
-Both apps are configured for Vercel deployment:
-
+Analyze a website:
 ```bash
-vercel deploy --prod
+curl -X POST http://localhost:5000/api/analyze \
+  -H "Content-Type: application/json" \
+  -d '{"url":"https://example.com"}'
 ```
 
-## Development
+Check API health:
+```bash
+curl http://localhost:5000/api/health
+```
 
-- Backend runs on `http://localhost:5000`
-- Frontend runs on `http://localhost:5173`
-- API calls are proxied to backend
+## 📝 API Endpoints
 
-## License
+### POST `/api/analyze`
+Analyze a website and return audit scores and recommendations.
 
-MIT
+**Request:**
+```json
+{
+  "url": "https://example.com"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "analysis": {
+    "url": "https://example.com",
+    "timestamp": "2026-04-03T17:10:00.000Z",
+    "scores": {
+      "seo": { "score": 75, "class": "good" },
+      "performance": { "score": 68, "class": "good" },
+      "security": { "score": 85, "class": "excellent" },
+      "bestPractices": { "score": 72, "class": "good" },
+      "overall": { "score": 75, "class": "good" }
+    },
+    "recommendations": [
+      {
+        "title": "Improve Core Web Vitals",
+        "priority": "high",
+        "impact": "Better SEO ranking and improved user experience",
+        "effort": "medium"
+      }
+    ],
+    "actionPlan": [
+      "Add security headers",
+      "Enable image lazy loading",
+      "Improve server response time"
+    ]
+  }
+}
+```
+
+### GET `/api/health`
+Check API server health status.
+
+**Response:**
+```json
+{
+  "status": "ok",
+  "service": "auditoria-report-api",
+  "timestamp": "2026-04-03T17:10:00.000Z",
+  "uptime": 1312.5
+}
+```
+
+## 🎨 Frontend Usage
+
+### Analyzing a Website
+
+1. Open `http://localhost:5173` (or assigned port)
+2. Enter website URL (must start with `http://` or `https://`)
+3. Click "Analyze Website"
+4. View results with:
+   - Overall score (0-100)
+   - Individual metric scores
+   - Top 3 priority actions
+   - Detailed recommendations
+
+### Score Classification
+
+- **Excellent (≥80)**: Green, ready for production
+- **Good (60-79)**: Orange, minor improvements needed
+- **Poor (<60)**: Red, significant improvements required
+
+## 📚 Development Guide
+
+See `DEVELOPMENT.md` for:
+- Code structure and patterns
+- Service architecture
+- Error handling strategy
+- Testing checklist
+- Git workflow
+
+## 🔐 Security
+
+- Environment variables for sensitive data
+- Input validation on all endpoints
+- Error handling without data exposure
+- CORS configured for frontend URL
+
+## 📈 Roadmap
+
+- [ ] Stripe payment integration (€29 per report)
+- [ ] Resend email notifications
+- [ ] PDF report generation with Puppeteer
+- [ ] Webhook handling for payment confirmation
+- [ ] Vercel deployment
+- [ ] User authentication
+- [ ] Report history & archives
+- [ ] Scheduled audits
+- [ ] Custom branding for reports
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+Proprietary - All rights reserved © 2026 Auditoría Report
+
+## 👤 Author
+
+Friday Agent - AI Assistant
+
+## 📧 Support
+
+For issues and questions, please open an issue on GitHub.
 
 ---
 
-**Made with ❤️ by Friday Agent for Javi**
+**Last Updated:** 2026-04-03
+**Status:** ✅ Production Ready (Core Features)
+**Version:** 1.0.0-beta
