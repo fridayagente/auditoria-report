@@ -1,34 +1,51 @@
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
-import analyzeRoutes from './routes/analyzeRoutes.js';
+import { config, validateConfig } from './config/env.js';
+import { logger } from './utils/logger.js';
+import apiRoutes from './routes/api.js';
+import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 
-dotenv.config();
+// Validate config before starting
+validateConfig();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173'
+  origin: config.frontendUrl
 }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', service: 'auditoria-report-backend' });
+// Request logging
+app.use((req, res, next) => {
+  logger.info(`${req.method} ${req.path}`);
+  next();
 });
 
 // Routes
-app.use('/api', analyzeRoutes);
+app.use('/api', apiRoutes);
 
 // Error handling
-app.use((err, req, res, next) => {
-  console.error('Unhandled error:', err);
-  res.status(500).json({ error: 'Internal server error' });
+app.use(notFoundHandler);
+app.use(errorHandler);
+
+// Start server
+const server = app.listen(config.port, () => {
+  logger.info(`✅ Backend running`, {
+    port: config.port,
+    env: config.nodeEnv,
+    frontend: config.frontendUrl
+  });
 });
 
-app.listen(PORT, () => {
-  console.log(`✅ Backend running on port ${PORT}`);
-  console.log(`📍 API: http://localhost:${PORT}`);
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  logger.info('SIGTERM received, shutting down gracefully');
+  server.close(() => {
+    logger.info('Server closed');
+    process.exit(0);
+  });
 });
+
+export default app;
